@@ -22,6 +22,20 @@ public class CarWashEventArrive extends Event {
 	 * Sist skall ett nytt arrive genereras med prioriteten som fås av ss.arrivalRand() och funktionen avslutas.
 	 */
 	public void execute(Simulator sim, SimState ss) {
+		if(ss.fastWash.length <= ss.fastWashMax){
+			ss.fastWash.add(id);
+			leave(ss.fastWashRand.next());
+		}
+		else if(ss.slowWash.length <= ss.slowWashMax){
+			ss.slowWash.add(id);
+			leave(ss.slowWashRand.next());
+		}
+		else if(ss.carQueue.length <= ss.carQueueMax){
+			ss.carQueue.add(id);
+		}
+		else(){
+			rejectedCars++;
+		}
 
 	}
 	
