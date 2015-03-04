@@ -1,8 +1,11 @@
 package lab5;
 
 public class CarWashEventArrive extends Event {
-	
-	public CarWashEventArrive(double p) {
+	private int prio;
+	private int id;
+	public CarWashEventArrive(double p, int id) {
+		prio = this.p;
+		id = this.id;
 		super(p);
 	}
 	
@@ -22,20 +25,32 @@ public class CarWashEventArrive extends Event {
 	 * Sist skall ett nytt arrive genereras med prioriteten som fås av ss.arrivalRand() och funktionen avslutas.
 	 */
 	public void execute(Simulator sim, SimState ss) {
-		if(ss.fastWash.length <= ss.fastWashMax){
+		ss.time = ss.time + prio;
+		ss.idleTime += (ss.fastWashMax - ss.fastWash.size()) * prio + (ss.slowWashMax - ss.slowWash.size()) * prio;
+		
+		if(ss.fastWash.size() <= ss.fastWashMax){
 			ss.fastWash.add(id);
-			leave(ss.fastWashRand.next());
+			CarWashEventLeave leave = new CarWashEventLeave(ss.fastWashRand.next());
+			setChanged();
+			notifyObservers;
 		}
-		else if(ss.slowWash.length <= ss.slowWashMax){
+		else if(ss.slowWash.size() <= ss.slowWashMax){
 			ss.slowWash.add(id);
-			leave(ss.slowWashRand.next());
+			CarWashEventLeave leave = new CarWashEventLeave(ss.slowWashRand.next());
+			setChanged();
+			notifyObservers;
 		}
-		else if(ss.carQueue.length <= ss.carQueueMax){
+		else if(ss.carQueue.size() <= ss.carQueueMax){
 			ss.carQueue.add(id);
+			setChanged();
+			notifyObservers;
 		}
 		else(){
 			rejectedCars++;
+			setChanged();
+			notifyObservers;
 		}
+		CarWashArrive(ss.arrivalRand());
 
 	}
 	
